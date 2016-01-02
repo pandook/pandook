@@ -1,0 +1,100 @@
+#!/usr/bin/env ruby
+require 'gli'
+
+include GLI::App
+
+program_desc 'pandoc + book'
+
+version Pandook::VERSION
+
+subcommand_option_handling :normal
+arguments :strict
+
+desc 'Init a project'
+arg_name 'path', [:multiple, :optional]
+command :init do |c|
+  c.action do |global_options,options,args|
+    help_now!("There should be a path.") if args.empty?
+    help_now!("There should be only one path.") if args.length > 1
+
+    DEFAULT_PANDOOK_YAML = <<EOF
+---
+
+- title: Pandook
+  type: book                    # options: book|article
+  toc: true                     # options: true|false
+  lof: true                     # options: true|false
+  lot: true                     # options: true|false
+  content: []                   # list of files
+  pandoc:
+    - from:                     # `-f FORMAT`, `-r FORMAT`, `--from=FORMAT`, `--read=FORMAT`
+    - to:                       # `-t FORMAT`, `-w FORMAT`, `--to=FORMAT`, `--write=FORMAT`
+    - output:                   # `-o FILENAME`, `--output=FILENAME`
+    - filter:                   # `-F PROGRAM`, `--filter=PROGRAM`
+    - smart: true               # `--smart`, options: true|false
+    - filter:                   # `--filter=PROGRAM`
+    - standalone:               # `--standalone`
+    - toc: true                 # `--toc-depth=NUMBER`, options: true|false
+    - include-in-header:        # `-H FILENAME`, `--include-in-header=FILENAME`
+    - include-before-body:      # `-B FILENAME`, `--include-before-body=FILENAME`
+    - include-after-body:       # `-A FILENAME`, `--include-after-body=FILENAME`
+    - html5: true               # `--html5`, options: true|false
+    - latex-engine: xelatex     # `--latex-engine=PROGRAM`
+    - latex-engine-opts:        # `--latex-engine-opt=STRING`
+EOF
+
+    path = args[0]
+
+    if File.exists?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w(. ..)).empty?)
+      raise "Path #{path} exists, please specify another path."
+    end
+
+    FileUtils.mkdir_p(path)
+    FileUtils.cd(File.join(path)) do
+      FileUtils.mkdir_p('content')
+      FileUtils.mkdir_p('output')
+      File.write('pandook.yaml', DEFAULT_PANDOOK_YAML)
+    end
+
+    puts "Created a blank pandook project at '#{path}'. Enjoy!"
+  end
+end
+
+desc 'Build project'
+arg_name 'Describe arguments to build here'
+command :build do |c|
+  c.action do |global_options,options,args|
+    puts "build command ran"
+  end
+end
+
+desc 'View output'
+arg_name 'Describe arguments to view here'
+command :view do |c|
+  c.action do |global_options,options,args|
+    puts "view command ran"
+  end
+end
+
+pre do |global,command,options,args|
+  # Pre logic here
+  # Return true to proceed; false to abort and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+  # on that command only
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)
