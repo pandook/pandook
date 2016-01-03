@@ -23,6 +23,7 @@ content: []
 pandoc:
   from:
   to:
+    - html
   output:
   filter:
   smart: true

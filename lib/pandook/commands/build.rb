@@ -20,11 +20,15 @@ command :build do |c|
 
     from = pandook_yaml['pandoc']['from']
     to = pandook_yaml['pandoc']['to']
-    case to
-    when 'html'
-      `pandoc #{pandoc_input} --from #{from} --to #{to} -o output/#{pandoc_output}.#{to}`
-    when 'pdf'
-      `pandoc #{pandoc_input} --from #{from} --to latex -o output/#{pandoc_output}.#{to}`
+    to.each do |format|
+      FileUtils.mkdir_p("output/#{format}")
+
+      case format
+      when 'html'
+        `pandoc #{pandoc_input} --from #{from} --to html -o output/#{format}/#{pandoc_output}.#{format}`
+      when 'pdf'
+        `pandoc #{pandoc_input} --from #{from} --to latex -o output/#{format}/#{pandoc_output}.#{format}`
+      end
     end
   end
 end
