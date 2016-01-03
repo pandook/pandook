@@ -15,26 +15,32 @@ command :init do |c|
 ---
 
 title: #{options[:title] || "Title" }
-type: #{options[:type] || "book" }       # options: book|article
-toc: true                     # options: true|false
-lof: true                     # options: true|false
-lot: true                     # options: true|false
-content: []                   # list of files
+type: #{options[:type] || "book" }
+toc: true
+lof: true
+lot: true
+content: []
 pandoc:
-  from:                     # `-f FORMAT`, `-r FORMAT`, `--from=FORMAT`, `--read=FORMAT`
-  to:                       # `-t FORMAT`, `-w FORMAT`, `--to=FORMAT`, `--write=FORMAT`
-  output:                   # `-o FILENAME`, `--output=FILENAME`
-  filter:                   # `-F PROGRAM`, `--filter=PROGRAM`
-  smart: true               # `--smart`, options: true|false
-  filter:                   # `--filter=PROGRAM`
-  standalone:               # `--standalone`
-  toc: true                 # `--toc-depth=NUMBER`, options: true|false
-  include-in-header:        # `-H FILENAME`, `--include-in-header=FILENAME`
-  include-before-body:      # `-B FILENAME`, `--include-before-body=FILENAME`
-  include-after-body:       # `-A FILENAME`, `--include-after-body=FILENAME`
-  html5: true               # `--html5`, options: true|false
-  latex-engine: xelatex     # `--latex-engine=PROGRAM`
-  latex-engine-opts:        # `--latex-engine-opt=STRING`
+  from:
+  to:
+  output:
+  filter:
+  smart: true
+  filter:
+  standalone:
+  toc: true
+  include-in-header:
+  include-before-body:
+  include-after-body:
+  html5: true
+  latex-engine: xelatex
+  latex-engine-opts:
+EOF
+
+    DEFAULT_GITIGNORE = <<EOF
+\#*
+*~
+*.swp
 EOF
 
     path = args[0]
@@ -48,6 +54,11 @@ EOF
       FileUtils.mkdir_p('content')
       FileUtils.mkdir_p('output')
       File.write('pandook.yaml', DEFAULT_PANDOOK_YAML)
+      File.write('.gitignore', DEFAULT_GITIGNORE)
+
+      `git init .`
+      `git add .gitignore pandook.yaml`
+      `git commit -m "Init by pandook(http://pandook.com)"`
     end
 
     puts "Created a blank pandook project at '#{path}'. Enjoy!"
