@@ -1,5 +1,8 @@
-# Ensure we require the local version and not one we might have installed already
+# Ensure we require the local version and not one we might have installed
+# already
+
 require File.join([File.dirname(__FILE__),'lib','pandook','version.rb'])
+
 spec = Gem::Specification.new do |s|
   s.name             = 'pandook'
   s.version          = Pandook::VERSION
