@@ -3,7 +3,8 @@ gemspec
 
 group :development do
   gem 'guard'
-  gem 'guard-rubocop'
+  gem 'guard-rake'
+  gem 'rubocop'
 end
 
 group :test do

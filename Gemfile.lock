@@ -50,9 +50,9 @@ GEM
       pry (>= 0.9.12)
       shellany (~> 0.0)
       thor (>= 0.18.1)
-    guard-rubocop (1.2.0)
-      guard (~> 2.0)
-      rubocop (~> 0.20)
+    guard-rake (1.0.0)
+      guard
+      rake
     json (1.8.3)
     listen (3.0.4)
       rb-fsevent (>= 0.9.3)
@@ -106,7 +106,8 @@ DEPENDENCIES
   aruba
   codeclimate-test-reporter
   guard
-  guard-rubocop
+  guard-rake
   pandook!
   rake
   rdoc
+  rubocop
